@@ -4,18 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terra News</title>
-    <link rel="stylesheet" href="./style.css">
     
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+    <link rel="stylesheet" href="./style.css">
+
 </head>
 <body>
     <div class="container">
-        <div class="topHeader">
-            <header>Terra News</header>
-            <search>Search Bar</search>
-        </div>
-        <div id="map">Map</div> 
-        <div class="results">Results</div>
-        <footer class="footer"> Footer </footer>
+        
+        <nav class="topHeader">
+            <strong>Terra News</strong>
+             <input type="text" placeholder="Search..">
+        </nav>
+
+        <div id="map"></div> 
+        
+        <aside  class="results">Results</aside>
+        
+        <footer class="footer">
+            <i>About</i>
+        </footer>
+
     </div>
 </body>
 </html>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<script src="./scripts.js"></script>
+
+<script>
+var map = L.map('map').setView([51.505, -0.09], 13);
+</script>
+
+
