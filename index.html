@@ -25,9 +25,16 @@
             <strong>Terra News</strong> </header>
 
             <section class="search-filters"> 
-            <form id="searchForm">
-                <input type="text" id="keyword" placeholder="Search Keywords..." required/>
-                <select id="language">
+
+                <label for="endpoint">Search Type:</label>
+                    <select id="endpoint">
+                        <option value="top-headlines">Top Headlines</option>
+                        <option value="everything">Everything</option>
+                    </select>
+
+                <form id="searchForm">
+                    <input type="text" id="keyword" placeholder="Search Keywords..." required>
+                    <select id="language">
                         <option value="">Any Language</option>
                         <option value="ar">Arabic</option>
                         <option value="de">German</option>
@@ -43,7 +50,7 @@
                         <option value="se">Northern Sami (Swedish)</option>
                         <option value="ud">Urdu</option>
                         <option value="zh">Chinese</option>
-                </select>
+                    </select>
                 
                 <select id="country">
                     <option value="">Any Country</option>
