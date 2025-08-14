@@ -8,38 +8,76 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
      crossorigin=""/>
+    
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+    
 
     <link rel="stylesheet" href="./style.css">
 
 </head>
 <body>
     <div class="container">
-        
-        <nav class="topHeader">
-            <strong>Terra News</strong>
-             <input type="text" placeholder="Search..">
-        </nav>
+        <div class="header-container">
 
+            <header class="topHeader">
+            <strong>Terra News</strong> </header>
+
+            <section class="search-filters"> 
+            <form id="searchForm">
+                <input type="text" id="keyword" placeholder="Search Keywords..." required/>
+                <select id="language">
+                        <option value="">Any Language</option>
+                        <option value="ar">Arabic</option>
+                        <option value="de">German</option>
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="he">Hebrew</option>
+                        <option value="it">Italian</option>
+                        <option value="nl">Dutch</option>
+                        <option value="no">Norwegian</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="ru">Russian</option>
+                        <option value="se">Northern Sami (Swedish)</option>
+                        <option value="ud">Urdu</option>
+                        <option value="zh">Chinese</option>
+                </select>
+                
+                <select id="country">
+                    <option value="">Any Country</option>
+                    <option value="us">United States</option>
+                    <option value="gb">United Kingdom</option>
+                    <option value="ca">Canada</option>
+                    <option value="au">Australia</option>
+                </select>
+
+                    <label for="fromDate">From:</label>
+                    <input type="date" id="fromDate" />
+
+                    <label for="toDate">To:</label>
+                    <input type="date" id="toDate" />
+
+                    <button type="submit">Search</button>
+            </form>
+            </section>
+
+        </div>
+            
         <div id="map"></div> 
         
-        <aside  class="results">Results</aside>
+        <aside class="results">
+            Results
+        </aside>
         
         <footer class="footer">
             <i>About</i>
         </footer>
 
     </div>
+
+    <script src="./scripts.js"></script>
 </body>
 </html>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
-
-<script src="./scripts.js"></script>
-
-<script>
-var map = L.map('map').setView([51.505, -0.09], 13);
-</script>
-
 
