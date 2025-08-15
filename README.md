@@ -103,7 +103,7 @@ terra-news/
 ### 🎓 Technical Requirements
 
 - [x] **API Integration**  
-      Uses both NewsAPI and Mediastack to fetch and display real-time news data
+       Uses both NewsAPI and Mediastack to fetch and display real-time news data
 
 - [x] **At least three features from the feature list:**
 
@@ -116,9 +116,9 @@ terra-news/
   - Media queries and flexible layout used for mobile/desktop
 
 - [x] **README**  
-      This file clearly explains the project and setup steps
+       This file clearly explains the project and setup steps
 
 - [x] **10+ Git commits**  
-      Documented throughout development using terminal Git
+       Documented throughout development using terminal Git
 
 ---
