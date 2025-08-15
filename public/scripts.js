@@ -16,8 +16,8 @@ function topHeadlinesParameters () {
         languageDropdown.value = "";
         
         countryDropdown.style.display = "inline-block";
-        keywordInput.style.display = "none";
-        keywordInput.value = ""
+        searchForm.style.display = "none";
+        searchForm.value = ""
         
 
 
@@ -25,7 +25,9 @@ function topHeadlinesParameters () {
     languageDropdown.style.display = "inline-block";
     countryDropdown.style.display = "none";
     countryDropdown.value = "";
-    keywordInput.style.display = "inline-block";
+    searchForm.style.display = "inline-block"
+    searchForm.value = ""
+
         }
 }
 
