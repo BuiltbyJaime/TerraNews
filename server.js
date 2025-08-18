@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const fetch = require("node-fetch");
 const path = require("path");
 
 const app = express();
@@ -8,7 +7,14 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use((req, res, next) => {
+  console.log(`🌐 Incoming request: ${req.method} ${req.url}`);
+  next();
+});
+
 app.get("/api/news", async (req, res) => {
+  console.log("🟢 /api/news was hit");
+
   const {
     endpoint = "top-headlines",
     q = "",
@@ -16,130 +22,53 @@ app.get("/api/news", async (req, res) => {
     language = "",
   } = req.query;
 
-  const newsApiParams = new URLSearchParams();
-  if (q) newsApiParams.append("q", q);
+  const params = new URLSearchParams();
+  if (q) params.append("q", q);
   if (endpoint === "top-headlines" && country)
-    newsApiParams.append("country", country);
+    params.append("country", country);
   if (endpoint === "everything" && language)
-    newsApiParams.append("language", language);
+    params.append("language", language);
 
-  const newsApiUrl = `https://newsapi.org/v2/${endpoint}?${newsApiParams.toString()}`;
+  const url = `https://newsapi.org/v2/${endpoint}?${params.toString()}`;
+  const apiKey = process.env.NEWS_API_KEY; // ✅ This was missing!
+
+  console.log("\n===================");
+  console.log("🔎 Final URL:", url);
+  console.log("🔐 API Key Loaded:", JSON.stringify(apiKey));
+  console.log("===================\n");
+
+  if (!apiKey) {
+    return res
+      .status(500)
+      .json({ error: "API key is undefined on the server" });
+  }
 
   try {
-    const response = await fetch(newsApiUrl, {
-      headers: { "X-Api-Key": process.env.NEWS_API_KEY },
+    const response = await fetch(url, {
+      headers: {
+        "X-Api-Key": apiKey,
+      },
     });
 
-    let data;
-    try {
-      data = await response.json();
-    } catch {
-      data = {};
-    }
+    console.log("🌍 Full NewsAPI URL:", url);
 
-    const shouldUseNewsAPI =
-      response.ok &&
-      data.status === "ok" &&
-      Array.isArray(data.articles) &&
-      data.articles.length > 0;
+    const text = await response.text();
 
-    if (shouldUseNewsAPI) {
-      return res.status(200).json({
-        status: "ok",
-        source: "newsapi",
-        articles: data.articles,
-      });
-    }
+    console.log("🧾 Raw NewsAPI Response:", text);
 
-    const mediastackParams = new URLSearchParams({
-      access_key: process.env.MEDIASTACK_API_KEY,
-      countries: country || "us",
-      languages: language || "en",
-      keywords: q || "",
-      limit: 50,
-    });
-
-    const mediastackUrl = `http://api.mediastack.com/v1/news?${mediastackParams.toString()}`;
-    const fallbackRes = await fetch(mediastackUrl);
-    const fallbackData = await fallbackRes.json();
-
-    const mappedArticles = (fallbackData.data || []).map((article) => ({
-      title: article.title,
-      description: article.description,
-      url: article.url,
-      urlToImage: article.image,
-      publishedAt: article.published_at,
-      source: { name: article.source },
-    }));
-
-    return res.status(200).json({
-      status: "ok",
-      source: "mediastack",
-      articles: mappedArticles,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: "error",
-      message: "Both APIs failed",
-      articles: [],
-    });
+    res.setHeader("Content-Type", "application/json");
+    res.status(response.status).send(text);
+  } catch (err) {
+    console.error("❌ Fetch error:", err);
+    res.status(500).json({ error: "Failed to fetch news" });
   }
+});
+
+app.get("/test", (req, res) => {
+  console.log("✅ /test route was hit");
+  res.send("Hello from /test!");
 });
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
-
-// require("dotenv").config();
-// const express = require("express");
-// const fetch = require("node-fetch");
-// const path = require("path");
-
-// const app = express();
-// const PORT = process.env.PORT || 3000;
-
-// app.use(express.static(path.join(__dirname, "public")));
-
-// app.get("/api/news", async (req, res) => {
-//   const { keywords = "", countries = "", languages = "" } = req.query;
-
-//   const mediastackParams = new URLSearchParams({
-//     access_key: process.env.MEDIASTACK_API_KEY,
-//     keywords,
-//     countries,
-//     languages,
-//     limit: 50,
-//   });
-
-//   const mediastackUrl = `http://api.mediastack.com/v1/news?${mediastackParams.toString()}`;
-
-//   try {
-//     const response = await fetch(mediastackUrl);
-//     const data = await response.json();
-
-//     const mappedArticles = (data.data || []).map((article) => ({
-//       title: article.title,
-//       description: article.description,
-//       url: article.url,
-//       urlToImage: article.image,
-//       publishedAt: article.published_at,
-//       source: { name: article.source },
-//     }));
-
-//     return res.status(200).json({
-//       status: "ok",
-//       source: "mediastack",
-//       articles: mappedArticles,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       status: "error",
-//       message: "Failed to fetch from Mediastack",
-//       articles: [],
-//     });
-//   }
-// });
-
-// app.listen(PORT, () => {
-//   console.log(`Server running at http://localhost:${PORT}`);
-// });

@@ -18,7 +18,6 @@ Global news is often scattered across sites and not visualized geographically. T
 
 - 🌍 Interactive map using Leaflet.js and custom markers
 - 🗺️ Country-based news filtering via map markers and dropdown
-- 🧠 Dynamic switching between two news APIs (NewsAPI and Mediastack) to ensure availability
 - 🔎 Keyword search and language filtering
 - 📱 Fully responsive design (mobile + desktop)
 - 💾 Local storage of last search preferences
@@ -64,7 +63,7 @@ Global news is often scattered across sites and not visualized geographically. T
 
    ```
    NEWS_API_KEY=your_newsapi_key
-   MEDIASTACK_API_KEY=your_mediastack_key
+
    ```
 
 5. **Start the server**
@@ -103,7 +102,7 @@ terra-news/
 ### 🎓 Technical Requirements
 
 - [x] **API Integration**  
-       Uses both NewsAPI and Mediastack to fetch and display real-time news data
+       Uses NewsAPI to fetch and display real-time news data
 
 - [x] **At least three features from the feature list:**
 
