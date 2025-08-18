@@ -70,6 +70,11 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error fetching news:", err);
       resultsContainer.innerHTML = `<p style="color:red;">Could not fetch news articles.</p>`;
     }
+
+    localStorage.setItem(
+      "lastSearch",
+      JSON.stringify({ endpoint, country, language, keyword })
+    );
   });
 
   // ✅ DISPLAY ARTICLES FUNCTION
@@ -84,9 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const articleDiv = document.createElement("div");
       articleDiv.classList.add("article");
 
-      if (article.urlToImage) {
+      const imageUrl = article.urlToImage || article.image;
+
+      if (imageUrl) {
         const img = document.createElement("img");
-        img.src = article.urlToImage;
+        img.src = imageUrl;
         img.alt = article.title || "News image";
         img.style.width = "100%";
         articleDiv.appendChild(img);
@@ -117,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
+  // Used Chatgpt to help create a list of the markers
   const countryMarkers = [
     { name: "United States", code: "us", coords: [38.9072, -77.0369] },
     { name: "United Kingdom", code: "gb", coords: [51.5074, -0.1278] },
@@ -144,14 +152,35 @@ document.addEventListener("DOMContentLoaded", () => {
     L.marker(country.coords)
       .addTo(map)
       .bindPopup(`<strong>${country.name}</strong><br>Click for headlines.`)
-      .on("click", () => {
-        countryDropdown.value = country.code;
-        keywordInput.value = "";
-        endpointSelect.value = "top-headlines";
-        topHeadlinesParameters();
-        searchForm.dispatchEvent(new Event("submit"));
+      .on("click", async () => {
+        try {
+          resultsContainer.innerHTML = "<p>Loading news...</p>";
+
+          const res = await fetch(`/api/marker-news?country=${country.code}`);
+          const data = await res.json();
+
+          if (data.error || !data.data) {
+            resultsContainer.innerHTML = `<p style="color:red;">${
+              data.error || "No results found."
+            }</p>`;
+            return;
+          }
+
+          displayArticles(data.data);
+        } catch (err) {
+          console.error("Error fetching marker news:", err);
+          resultsContainer.innerHTML = `<p style="color:red;">Could not fetch marker news.</p>`;
+        }
       });
   });
+  const savedSearch = JSON.parse(localStorage.getItem("lastSearch"));
+
+  if (savedSearch) {
+    endpointSelect.value = savedSearch.endpoint || "top-headlines";
+    countryDropdown.value = savedSearch.country || "";
+    languageDropdown.value = savedSearch.language || "";
+    keywordInput.value = savedSearch.keyword || "";
+  }
 
   topHeadlinesParameters();
 });

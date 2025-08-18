@@ -27,7 +27,7 @@ Global news is often scattered across sites and not visualized geographically. T
 
 ## ⚙️ Technologies Used
 
-- JavaScript (Vanilla)
+- JavaScript
 - HTML5 & CSS3
 - Leaflet.js (for map)
 - NewsAPI.org
@@ -35,8 +35,32 @@ Global news is often scattered across sites and not visualized geographically. T
 - Express.js (Node.js backend)
 - Fetch API
 - LocalStorage API
+- ChatGPT
 
 ---
+
+## PreRequesities
+
+Make sure the following are installed:
+
+Node.js (v18+ recommended):
+Install from nodejs.org
+Check version:
+
+```bash
+node -v
+```
+
+npm (comes with Node.js)
+Check version:
+
+```bash
+npm -v
+```
+
+A browser (Chrome, Firefox, Safari, etc.)
+
+Internet connection (to fetch news from external APIs)
 
 ## 🔧 Project Setup Instructions
 
@@ -63,7 +87,7 @@ Global news is often scattered across sites and not visualized geographically. T
 
    ```
    NEWS_API_KEY=your_newsapi_key
-
+   MEDIASTACK_API_KEY=MediaStack_API_Key
    ```
 
 5. **Start the server**
@@ -102,7 +126,7 @@ terra-news/
 ### 🎓 Technical Requirements
 
 - [x] **API Integration**  
-       Uses NewsAPI to fetch and display real-time news data
+       Uses two APIS to fetch and display real-time news data
 
 - [x] **At least three features from the feature list:**
 
@@ -121,3 +145,7 @@ terra-news/
        Documented throughout development using terminal Git
 
 ---
+
+## Additional Notes
+
+      There were instances of chatgpt used to troubleshoot errors with markers not being placed correctly and with logic concerning the server.

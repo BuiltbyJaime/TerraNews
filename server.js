@@ -11,7 +11,7 @@ app.use((req, res, next) => {
   console.log(`🌐 Incoming request: ${req.method} ${req.url}`);
   next();
 });
-
+// Used Chatgpt to correct code concerning an issue with the API key not being parsed correctly in the browser.
 app.get("/api/news", async (req, res) => {
   console.log("🟢 /api/news was hit");
 
@@ -30,7 +30,7 @@ app.get("/api/news", async (req, res) => {
     params.append("language", language);
 
   const url = `https://newsapi.org/v2/${endpoint}?${params.toString()}`;
-  const apiKey = process.env.NEWS_API_KEY; // ✅ This was missing!
+  const apiKey = process.env.NEWS_API_KEY; //
 
   console.log("\n===================");
   console.log("🔎 Final URL:", url);
@@ -61,6 +61,35 @@ app.get("/api/news", async (req, res) => {
   } catch (err) {
     console.error("❌ Fetch error:", err);
     res.status(500).json({ error: "Failed to fetch news" });
+  }
+});
+
+app.get("/api/marker-news", async (req, res) => {
+  const { country } = req.query;
+  const apiKey = process.env.MEDIASTACK_API_KEY;
+
+  if (!apiKey) {
+    return res.status(500).json({ error: "Mediastack API key not found." });
+  }
+
+  if (!country) {
+    return res.status(400).json({ error: "Country code is required." });
+  }
+
+  const url = `http://api.mediastack.com/v1/news?access_key=${apiKey}&countries=${country}&limit=10`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.error) {
+      return res.status(500).json({ error: data.error.message });
+    }
+
+    res.json(data);
+  } catch (err) {
+    console.error("❌ Mediastack fetch error:", err);
+    res.status(500).json({ error: "Failed to fetch marker news" });
   }
 });
 
